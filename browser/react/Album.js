@@ -9,19 +9,29 @@ class Album extends React.Component{
   render(){
     if(!this.props.id)
       return null;
-    const songs = this.props.songs.map((song, index) => (
-        <tr key={index}>
-          <td>
+
+    console.log(this.props.currentSong);
+    const songs = this.props.songs.map(
+      (song, index) => {
+        const button = this.props.currentSong && (song.id === this.props.currentSong.id)
+          ? null
+          : (
             <button className="btn btn-default btn-xs">
-              <span className="glyphicon glyphicon-play"></span>
+              <span onClick={() => this.props.start(song)} className="glyphicon glyphicon-play"></span>
             </button>
-          </td>
-          <td>{ song.name }</td>
-          <td>{ song.artists.map(artist => artist.name).join(', ') }</td>
-          <td>{ song.genre }</td>
-        </tr>
-      )
+          );
+
+        return (
+          <tr key={index}>
+            <td>{ button }</td>
+            <td>{ song.name }</td>
+            <td>{ song.artists.map(artist => artist.name).join(', ') }</td>
+            <td>{ song.genre }</td>
+          </tr>
+        );
+      }
     );
+
     return (
         <div className="album col-xs-10">
           <div>

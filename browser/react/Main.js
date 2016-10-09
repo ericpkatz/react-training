@@ -30,27 +30,31 @@ class Main extends React.Component{
     super();
 
     this.state = { album: { songs: [] } };
-
-    /*
-    this.state = {
-      album: fakeAlbum
-    };
-    */
+    this.start = this.start.bind(this);
 
   }
+
   componentDidMount(){
     fetch('/api/albums/4')
       .then( result=> result.json())
       .then( album=> this.setState( { album:  album  } ));
   }
+
+  start(song) {
+    const audio = document.createElement('audio');
+    audio.src = song.url;
+    audio.load();
+    audio.play();
+    this.setState({ currentSong: song });
+  }
+
   render(){
-    console.log(this.state.album);
     return (
-        <div id="main" className="container-fluid">
-          <Sidebar />
-          <Album {...this.state.album}/>
-          <Footer />
-        </div>
+      <div id="main" className="container-fluid">
+        <Sidebar />
+        <Album {...this.state.album} start={this.start} currentSong={this.state.currentSong} />
+        <Footer />
+      </div>
     );
   }
 }
